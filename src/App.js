@@ -1,24 +1,54 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import Login from './components/Login';
+import Timer from './components/Timer';
+import BreakTimer from './components/BreakTimer';
+
+import "../src/App.css"
+
+import RegistrationForm from './components/RegisterForm';
+
 
 function App() {
+
+  const [user, setUser] = useState(null);
+  const [showTimer, setShowTimer] = useState(false);
+  const [ showBreakTimer, setBreakTimer ] = useState(false);
+
+
+  const handleSignIn = () => {
+    setUser({email: 'ashishpardeshi@google.com'});
+    setShowTimer(true);
+  };
+
+  const handleSignOut = () => {
+    setUser(null);
+    setShowTimer(false);
+    setBreakTimer(false);
+  }
+
+  const handleBreakComplete = () => {
+    setShowTimer(true);
+    setBreakTimer(false);
+  }
+
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <header className="App-header">
+      <Login user={user} onSignIn={handleSignIn} onSignOut={handleSignOut} />
+      {user ? (
+        <>
+          {showTimer && (
+            <Timer duration={1500} onBreakTimerComplete={handleBreakComplete} />
+          )}
+          {showBreakTimer && <BreakTimer />}
+        </>
+      ) : (
+        <RegistrationForm />
+      )}
+    </header>
+  </div>
   );
 }
 
